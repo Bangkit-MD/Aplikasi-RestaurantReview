@@ -19,11 +19,15 @@ class MainViewModel : ViewModel() {
     private val _isLoading = MutableLiveData<Boolean>()
     val isLoading: LiveData<Boolean> = _isLoading
 
-   companion object {
-      private const val TAG = "ViewMainMode"
-      private const val RESTAURANT_ID = "uewq1zg2zlskfw1e867"
+    private val _snackBarText = MutableLiveData<String>()
+    val snackBar : LiveData<String> = _snackBarText
 
-   }
+    companion object {
+        private const val TAG = "ViewMainMode"
+        private const val RESTAURANT_ID = "uewq1zg2zlskfw1e867"
+
+    }
+
     init {
         findRestaurant()
     }
@@ -56,19 +60,20 @@ class MainViewModel : ViewModel() {
     }
 
 
-     fun postReview(review: String) {
+    fun postReview(review: String) {
         _isLoading.value = true
-        val client = ApiConfig.getApiService().postReview(RESTAURANT_ID, "Pengguna",review)
-        client.enqueue(object : Callback<PostReviewResponse>{
+        val client = ApiConfig.getApiService().postReview(RESTAURANT_ID, "Pengguna", review)
+        client.enqueue(object : Callback<PostReviewResponse> {
             override fun onResponse(
                 call: Call<PostReviewResponse>,
                 response: Response<PostReviewResponse>
             ) {
                 _isLoading.value = false
                 val respondBody = response.body()
-                if (response.isSuccessful && respondBody != null){
+                if (response.isSuccessful && respondBody != null) {
                     _listReview.value = respondBody.customerReviews
-                }else{
+                    _snackBarText.value = respondBody.message
+                } else {
                     Log.d(TAG, "Error: ${response.message()}")
                 }
             }

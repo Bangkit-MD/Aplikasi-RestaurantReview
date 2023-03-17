@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.restaurantreview.databinding.ActivityMainBinding
+import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Response
 
@@ -52,6 +53,10 @@ class MainActivity : AppCompatActivity() {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view.windowToken, 0)
 
+        }
+
+        mainViewModel.snackBar.observe(this) { text ->
+            Snackbar.make(window.decorView.rootView,text,Snackbar.LENGTH_SHORT).show()
         }
 
     }
