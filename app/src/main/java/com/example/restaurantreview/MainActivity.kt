@@ -55,8 +55,11 @@ class MainActivity : AppCompatActivity() {
 
         }
 
-        mainViewModel.snackBar.observe(this) { text ->
-            Snackbar.make(window.decorView.rootView,text,Snackbar.LENGTH_SHORT).show()
+        mainViewModel.snackBar.observe(this) {
+            it.getContentIfNotHandled()?.let {snackText ->
+                Snackbar.make(window.decorView.rootView,snackText,Snackbar.LENGTH_SHORT).show()
+            }
+
         }
 
     }
